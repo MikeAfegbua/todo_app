@@ -1,20 +1,24 @@
-// ignore_for_file: use_key_in_widget_constructors
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoey/screens/tasks_screen.dart';
-import 'package:todoey/models/task_data.dart';
+import 'package:todoey/view_model/task_provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (BuildContext context) => TaskData(),
-      child: MaterialApp(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (BuildContext context) => (TaskProvider()),
+        ),
+      ],
+      child: const MaterialApp(
         home: TasksScreen(),
         debugShowCheckedModeBanner: false,
       ),

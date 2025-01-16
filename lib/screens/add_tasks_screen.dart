@@ -1,13 +1,19 @@
-// ignore_for_file: use_key_in_widget_constructors, avoid_print
-
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
-import 'package:todoey/models/task_data.dart';
+import 'package:todoey/view_model/task_provider.dart';
 
 // ignore: must_be_immutable
-class AddTaskScreen extends StatelessWidget {
+class AddTaskScreen extends StatefulWidget {
+  const AddTaskScreen({Key? key}) : super(key: key);
+
+  @override
+  State<AddTaskScreen> createState() => _AddTaskScreenState();
+}
+
+class _AddTaskScreenState extends State<AddTaskScreen> {
   String newTaskTitle = '';
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,32 +36,35 @@ class AddTaskScreen extends StatelessWidget {
               style: TextStyle(fontSize: 30.0, color: Colors.lightBlueAccent),
             ),
             TextField(
-                autofocus: true,
-                textAlign: TextAlign.center,
-                onChanged: (newText) {
-                  newTaskTitle = newText;
-                }),
+              autofocus: true,
+              textAlign: TextAlign.center,
+              onChanged: (newText) {
+                newTaskTitle = newText;
+              },
+            ),
             const SizedBox(
               height: 10.0,
             ),
             TextButton(
               onPressed: () {
-                Provider.of<TaskData>(context, listen: false).addTask(
-                    newTaskTitle); //context.read<TaskData>().addTask(newTaskTitle);
-                // cant add data without function
+                // Provider.of<TaskProvider>(context, listen: false).addTask(
+                //   newTaskTitle,
+                // );
+
+                context.read<TaskProvider>().addTask(newTaskTitle);
 
                 Navigator.pop(context);
               },
-              child: const Text(
-                'Add',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
               style: TextButton.styleFrom(
                 backgroundColor: Colors.lightBlueAccent,
                 textStyle: const TextStyle(
                   fontSize: 24,
+                ),
+              ),
+              child: const Text(
+                'Add',
+                style: TextStyle(
+                  color: Colors.white,
                 ),
               ),
             ),
