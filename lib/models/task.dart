@@ -1,6 +1,6 @@
 class Task {
   final String name;
-  bool isDone = false; // no need for false since required
+  bool isDone = false;
 
   Task({required this.name, required this.isDone});
 
