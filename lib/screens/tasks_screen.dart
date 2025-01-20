@@ -48,13 +48,18 @@ class _TasksScreenState extends State<TasksScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const CircleAvatar(
-                    radius: 30.0,
-                    backgroundColor: Colors.white,
-                    child: Icon(
-                      Icons.list,
-                      size: 30.0,
-                      color: Colors.lightBlueAccent,
+                  GestureDetector(
+                    onTap: () {
+                      taskProviderRef1.getMyTodos();
+                    },
+                    child: const CircleAvatar(
+                      radius: 30.0,
+                      backgroundColor: Colors.white,
+                      child: Icon(
+                        Icons.list,
+                        size: 30.0,
+                        color: Colors.lightBlueAccent,
+                      ),
                     ),
                   ),
                   const SizedBox(
@@ -92,36 +97,82 @@ class _TasksScreenState extends State<TasksScreen> {
                 child: Consumer<TaskProvider>(
                   // OPTION 3
                   builder: (context, taskProvider, child) {
-                    return ListView.separated(
-                      itemCount: taskProvider.tasks.length,
-                      itemBuilder: (context, index) {
-                        final taskItem = taskProvider.tasks[index];
+                    return taskProvider.todoList.isNotEmpty
+                        ? ListView.separated(
+                            itemCount: taskProvider.todoList.length,
+                            itemBuilder: (context, index) {
+                              final taskItem = taskProvider.todoList[index];
 
-                        return ListTile(
-                          title: Text(
-                            taskItem.name,
-                            style: TextStyle(
-                              decoration: taskItem.isDone
-                                  ? TextDecoration.lineThrough
-                                  : null,
-                            ),
-                          ),
-                          trailing: Checkbox(
-                            activeColor: Colors.lightBlueAccent,
-                            value: taskItem.isDone,
-                            onChanged: (value) {
-                              taskProvider.updateTask(taskItem);
+                              return ListTile(
+                                leading: Text(
+                                  '${index + 1}',
+                                ),
+                                title: Text(
+                                  taskItem.title ?? 'N/A',
+                                  style: TextStyle(
+                                    decoration: (taskItem.isCompleted ?? false)
+                                        ? TextDecoration.lineThrough
+                                        : null,
+                                  ),
+                                ),
+                                subtitle: Text(
+                                  taskItem.description ?? 'N/A',
+                                  style: TextStyle(
+                                    decoration: (taskItem.isCompleted ?? false)
+                                        ? TextDecoration.lineThrough
+                                        : null,
+                                  ),
+                                ),
+                                trailing: Checkbox(
+                                  activeColor: Colors.lightBlueAccent,
+                                  value: (taskItem.isCompleted ?? false),
+                                  onChanged: (value) {
+                                    taskProvider.updateTodo(
+                                      id: taskItem.id ?? '',
+                                      title: taskItem.title ?? '',
+                                      description: taskItem.description ?? '',
+                                      isCompleted: value ?? false,
+                                      context: context,
+                                    );
+                                  },
+                                ),
+                                onLongPress: () {
+                                  // taskProvider.removeTask(taskItem);
+                                },
+                              );
                             },
-                          ),
-                          onLongPress: () {
-                            taskProvider.removeTask(taskItem);
-                          },
-                        );
-                      },
-                      separatorBuilder: (context, index) => const SizedBox(
-                        height: 5,
-                      ),
-                    );
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(
+                              height: 5,
+                            ),
+                          )
+                        : const Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'No todo available!',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text(
+                                      'Your todos will be shown here.',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          );
                   },
                 ),
               ),

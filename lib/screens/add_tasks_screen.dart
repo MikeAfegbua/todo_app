@@ -14,6 +14,8 @@ class AddTaskScreen extends StatefulWidget {
 class _AddTaskScreenState extends State<AddTaskScreen> {
   String newTaskTitle = '';
 
+  String newTaskTitleDescription = '';
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,23 +37,45 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 30.0, color: Colors.lightBlueAccent),
             ),
-            TextField(
+            TextFormField(
               autofocus: true,
               textAlign: TextAlign.center,
               onChanged: (newText) {
                 newTaskTitle = newText;
               },
+              decoration: const InputDecoration(
+                hintText: 'Title',
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            TextFormField(
+              autofocus: true,
+              textAlign: TextAlign.center,
+              onChanged: (text) {
+                newTaskTitleDescription = text;
+              },
+              decoration: const InputDecoration(
+                hintText: 'Description',
+              ),
             ),
             const SizedBox(
               height: 10.0,
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 // Provider.of<TaskProvider>(context, listen: false).addTask(
                 //   newTaskTitle,
                 // );
 
-                context.read<TaskProvider>().addTask(newTaskTitle);
+                //  context.read<TaskProvider>().addTask(newTaskTitle);
+
+                await context.read<TaskProvider>().createTodo(
+                      title: newTaskTitle,
+                      description: newTaskTitleDescription,
+                      context: context,
+                    );
 
                 Navigator.pop(context);
               },
