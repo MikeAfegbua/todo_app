@@ -1,13 +1,13 @@
 import 'package:todoey/core/base_api.dart';
 import 'package:todoey/models/todo_model.dart';
 
-class TodoService extends BaseAPI {
-  factory TodoService() {
+class TodoServiceDio extends BaseAPI {
+  factory TodoServiceDio() {
     return instance;
   }
 
-  TodoService._internal();
-  static final TodoService instance = TodoService._internal();
+  TodoServiceDio._internal();
+  static final TodoServiceDio instance = TodoServiceDio._internal();
 
   Future<List<Todo>> getTodos() async {
     const url = 'todos?page=1&limit=10';

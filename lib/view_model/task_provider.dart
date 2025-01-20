@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:todoey/core/crud_dio_api.dart';
+// import 'package:todoey/core/crud_http_api.dart';
 import 'package:todoey/models/task.dart';
 import 'package:todoey/models/todo_model.dart';
 
@@ -63,7 +64,7 @@ class TaskProvider extends ChangeNotifier {
   List<Todo> todoList = [];
 
   Future<void> getMyTodos() async {
-    final myList = await TodoService.instance.getTodos();
+    final myList = await TodoServiceDio.instance.getTodos();
 
     if (kDebugMode) print('My list count is ${myList.length}');
 
@@ -81,7 +82,7 @@ class TaskProvider extends ChangeNotifier {
     required String description,
     required BuildContext context,
   }) async {
-    final response = await TodoService.instance.createTodo(
+    final response = await TodoServiceDio.instance.createTodo(
       title: title,
       description: description,
     );
@@ -120,7 +121,7 @@ class TaskProvider extends ChangeNotifier {
     required bool isCompleted,
     required BuildContext context,
   }) async {
-    final response = await TodoService.instance.updateTodo(
+    final response = await TodoServiceDio.instance.updateTodo(
       title: title,
       description: description,
       id: id,
