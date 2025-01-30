@@ -58,7 +58,7 @@ class TaskProvider extends ChangeNotifier {
   }
 
   //////////////////////
-  ////////GET-TODO//////
+  ////////GET-TODOS/////
   //////////////////////
 
   List<Todo> todoList = [];
@@ -119,6 +119,7 @@ class TaskProvider extends ChangeNotifier {
     required String title,
     required String description,
     required bool isCompleted,
+    //
     required BuildContext context,
   }) async {
     final response = await TodoServiceDio.instance.updateTodo(
@@ -146,8 +147,64 @@ class TaskProvider extends ChangeNotifier {
     if (response) {
       ScaffoldMessenger.of(context).showSnackBar(successSnackBar);
       getMyTodos();
+      getSingleTodo(
+        id: id,
+      );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(failedSnackBar);
     }
+  }
+
+  //////////////////////
+  //////DELETE-TODO/////
+  //////////////////////
+
+  Future<void> deleteTodoById({
+    required String id,
+    //
+    required BuildContext context,
+  }) async {
+    final response = await TodoServiceDio.instance.deleteTodoById(
+      id: id,
+    );
+
+    const successSnackBar = SnackBar(
+      content: Text(
+        'Todo deleted successfully!',
+      ),
+    );
+
+    const failedSnackBar = SnackBar(
+      content: Text(
+        'Todo cannot be deleted, please try again!',
+        style: TextStyle(
+          color: Colors.red,
+        ),
+      ),
+    );
+
+    if (response) {
+      ScaffoldMessenger.of(context).showSnackBar(successSnackBar);
+      getMyTodos();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(failedSnackBar);
+    }
+  }
+  //////////////////////
+  ////GET-SINGLE_TODO///
+  //////////////////////
+
+  Todo? _singleTodo;
+  Todo? get singleTodo => _singleTodo;
+
+  Future<bool> getSingleTodo({
+    required String id,
+  }) async {
+    final response = await TodoServiceDio.instance.getTodoById(id: id);
+
+    _singleTodo = response;
+
+    notifyListeners();
+    return true;
   }
 }

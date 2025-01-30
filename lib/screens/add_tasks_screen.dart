@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoey/view_model/task_provider.dart';
 
-// ignore: must_be_immutable
 class AddTaskScreen extends StatefulWidget {
-  const AddTaskScreen({Key? key}) : super(key: key);
+  const AddTaskScreen({
+    super.key,
+  });
 
   @override
   State<AddTaskScreen> createState() => _AddTaskScreenState();
@@ -37,6 +38,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 30.0, color: Colors.lightBlueAccent),
             ),
+            const SizedBox(
+              height: 20,
+            ),
             TextFormField(
               autofocus: true,
               textAlign: TextAlign.center,
@@ -61,7 +65,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               ),
             ),
             const SizedBox(
-              height: 10.0,
+              height: 50.0,
             ),
             TextButton(
               onPressed: () async {

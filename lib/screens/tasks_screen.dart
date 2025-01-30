@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoey/screens/add_tasks_screen.dart';
+import 'package:todoey/screens/single_task_screen.dart';
 import 'package:todoey/view_model/task_provider.dart';
 
 class TasksScreen extends StatefulWidget {
@@ -137,7 +138,25 @@ class _TasksScreenState extends State<TasksScreen> {
                                   },
                                 ),
                                 onLongPress: () {
-                                  // taskProvider.removeTask(taskItem);
+                                  taskProvider.deleteTodoById(
+                                    id: taskItem.id ?? '',
+                                    context: context,
+                                  );
+                                },
+                                onTap: () async {
+                                  final response =
+                                      await taskProvider.getSingleTodo(
+                                    id: taskItem.id ?? '',
+                                  );
+
+                                  if (response) {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute<void>(
+                                        builder: (BuildContext context) =>
+                                            const SingleTaskScreen(),
+                                      ),
+                                    );
+                                  }
                                 },
                               );
                             },

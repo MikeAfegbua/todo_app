@@ -2,12 +2,14 @@ import 'package:todoey/core/base_api.dart';
 import 'package:todoey/models/todo_model.dart';
 
 class TodoServiceDio extends BaseAPI {
+  // CODE START
   factory TodoServiceDio() {
     return instance;
   }
 
   TodoServiceDio._internal();
   static final TodoServiceDio instance = TodoServiceDio._internal();
+  // CODE END
 
   Future<List<Todo>> getTodos() async {
     const url = 'todos?page=1&limit=10';
@@ -97,6 +99,52 @@ class TodoServiceDio extends BaseAPI {
       }
     } catch (e) {
       return false;
+    }
+  }
+
+  Future<bool> deleteTodoById({required String id}) async {
+    final url = 'todos/$id';
+
+    try {
+      final res = await dio('application/json').delete(
+        url,
+      );
+
+      log(res.statusCode);
+      log(res.data);
+
+      switch (res.statusCode) {
+        case 200:
+          return true;
+
+        default:
+          return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<Todo> getTodoById({required String id}) async {
+    final url = 'todos/$id';
+
+    try {
+      final res = await dio('application/json').get(
+        url,
+      );
+
+      log(res.statusCode);
+      log(res.data);
+
+      switch (res.statusCode) {
+        case 200:
+          return Todo.fromJson((res.data as Map<String, dynamic>)['data']);
+
+        default:
+          return Todo();
+      }
+    } catch (e) {
+      return Todo();
     }
   }
 }
